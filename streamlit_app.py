@@ -7,4 +7,5 @@ if 'running' not in st.session_state:
     
 st.session_state.running = st.session_state.running+1
 st.write(st.session_state.running)
+st.write("coucou")
 st.button("rerun")
