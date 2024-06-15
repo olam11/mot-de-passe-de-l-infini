@@ -2,7 +2,7 @@ import streamlit as st
 
 st.set_page_config(page_title="mot de passe de l'infini",page_icon=":infinity:")
     
-if 'key' not in st.session_state:
+if 'running' not in st.session_state:
     st.session_state.running = 0
     
 st.session_state.running = st.session_state.running+1
