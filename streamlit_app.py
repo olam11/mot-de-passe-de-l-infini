@@ -21,8 +21,7 @@ st.session_state.run = st.session_state.run+1
 if "ligne"not in st.session_state:
     st.session_state.ligne = 0
 if "historique" not in st.session_state:
-    st.session_state.historique = []
-st.write(liste_des_mots_francais_courants)   
+    st.session_state.historique = []   
 #class Chaine : une chaine de caractère 
 class Chaine():
     def __init__(self,text,statut):
@@ -33,6 +32,7 @@ class Chaine():
       
     def supprimer_accents(self):
         self.text = unidecode.unidecode(self.text)
+        self.text = lower(self.text)
         #méthodepour supprimer les accents et les cédilles 
         
     def mot_random(self):
