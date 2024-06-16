@@ -31,9 +31,8 @@ class Chaine():
         #son statut : si elle est choisie au hasard ou donnée par l'utilisateur
       
     def supprimer_accents(self):
-        self.text = unidecode.unidecode(self.text)
-        self.text = lower(self.text)
-        #méthodepour supprimer les accents et les cédilles 
+        self.text = lower(unidecode.unidecode(self.text))
+        #méthode pour supprimer les accents et les cédilles 
         
     def mot_random(self):
         self.text = liste_des_mots_francais_courants[random.randint(0,len(liste_des_mots_francais_courants)-1)]
