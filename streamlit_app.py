@@ -117,5 +117,6 @@ if st.session_state.ligne == 5:
     st.write(f"le mot était {st.session_state.mot_a_trouve.text} !")    
     del st.session_state.ligne
     del st.session_state.mot_a_trouve
+    del st.session_state.historique
 st.write(":red[run]"+" "+str(st.session_state.run)+":red[ times]")
 
