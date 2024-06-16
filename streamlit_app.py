@@ -22,7 +22,7 @@ if "ligne"not in st.session_state:
     st.session_state.ligne = 0
 if "historique" not in st.session_state:
     st.session_state.historique = []
-    
+st.write(liste_des_mots_francais_courants)   
 #class Chaine : une chaine de caractère 
 class Chaine():
     def __init__(self,text,statut):
