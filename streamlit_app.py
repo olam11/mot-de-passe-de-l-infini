@@ -99,7 +99,7 @@ if mot_donne.text != "":
         st.session_state.ligne = st.session_state.ligne+1
         mot_donne.creer_lettres()
         check(mot_donne.text,st.session_state.mot_a_trouve.text)
-        st.session_state.historique.append(st.session_state.ligne+f":{lettres['donné'][0].color}[{lettres['donné'][0].text}]"+
+        st.session_state.historique.append(str(st.session_state.ligne)+". "+f":{lettres['donné'][0].color}[{lettres['donné'][0].text}]"+
                                            f":{lettres['donné'][1].color}[{lettres['donné'][1].text}]"+
                                            f":{lettres['donné'][2].color}[{lettres['donné'][2].text}]"+
                                            f":{lettres['donné'][3].color}[{lettres['donné'][3].text}]"+
