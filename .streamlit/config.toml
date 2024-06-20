@@ -1,5 +1,10 @@
 [theme]
 base="dark"
+primaryColor="#4bb0ff"
 backgroundColor="#000000"
 secondaryBackgroundColor="#101018"
 font="serif"
+
+
+[client]
+showErrorDetails = false
