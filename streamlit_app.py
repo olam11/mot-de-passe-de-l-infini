@@ -150,7 +150,7 @@ if mot_donne.text != "":
     #ou si le mot n'est pas français ou ne contient pas 5 lettres
     elif mot_donne.text not in liste_des_mots_francais or len(mot_donne.text) != 5  :
             #écrire "Le mot n'est pas francais ou ne fait pas 5 lettres" 
-            st.write("Le mot n'est pas francais ou ne fait pas 5 lettres")
+            st.error("Le mot n'est pas francais ou ne fait pas 5 lettres",icon="⚠️")
 #si ligne = 4 alors prévenir que cela seras la dernière proposition
 if st.session_state.ligne == 4:
     st.write(f":red[Il vous reste 1 essai, vous y êtes presque !]")
