@@ -19,6 +19,9 @@ st.title("MOT DE PASSE DE L'INFINI")
 if "run" not in st.session_state:
     st.session_state.run = 0 
 st.session_state.run = st.session_state.run+1
+
+if "game" not in st.session_state:
+    st.session_state.game = 0 
 #configuration de la variable ligne qui indique le nombre d'essai dans une partie
 if "ligne"not in st.session_state:
     st.session_state.ligne = 0
@@ -102,11 +105,14 @@ st.text_input(label="###### Proposez un mot de 5 lettres :",max_chars=5,key="tex
             mot recherché : algue       
             mot proposé : danse         
             résultat : :grey[d]:red[a]:grey[ns]:green[e]        
-            **Une fois que vous avez gagné (ou perdu), il vous suffit de proposer un nouveau mot pour rejouer !**               
+            **Une fois que vous avez gagné (ou perdu), il vous suffit de proposer un nouveau mot pour rejouer !**       
+            :grey[{st.session_state.mot_a_trouver.text}]               
              """)
 #affichage de l'historique
+conteneur = st.container()
 for element in st.session_state.historique:
-    st.markdown(element)
+    with conteneur:
+        st.markdown(element)
 #configuration 
 mot_donne = Chaine(mot,"donné")
 mot_donne.supprimer_accents()
@@ -145,6 +151,10 @@ if mot_donne.text != "":
                 temps = str(round(end_time-st.session_state.start_time)%60)+ " sec !"
             elif round(end_time-st.session_state.start_time)//60>0:
                 temps = str(round(end_time-st.session_state.start_time)//60)+" min et "+ str(round(end_time-st.session_state.start_time)%60)+ " sec !"
+            if "meilleur_temps" not in st.session_state:
+                st.session_state.meilleur_temps = end_time-st.session_state.start_time
+            if end_time-st.session_state.start_time < st.session_state.meilleur_temps:
+                st.session_state.meilleur_temps = end_time-st.session_state.start_time
             #écrire le temps pris
             st.write(f"***Vous avez trouvé en {temps}***")
     #ou si le mot n'est pas français ou ne contient pas 5 lettres
@@ -156,11 +166,22 @@ if st.session_state.ligne == 4:
     st.write(f":red[Il vous reste 1 essai, vous y êtes presque !]")
 #si ligne = 5 alors la partie est fini          
 if st.session_state.ligne == 5:
+    st.session_state.game = st.session_state.game+1
     #écrire "le mot était+lemot" et "Pour rejouer, proposez un nouveau mot !"
     st.write(f"Le mot était {st.session_state.mot_a_trouver.text} !") 
     st.write("Pour rejouer, proposez un nouveau mot !") 
+    if st.button("rejouer") :
+        conteneur = ""
     #supprimer les éléments de la partie pour rejouer au besoin  
     del st.session_state.ligne  
     del st.session_state.mot_a_trouver
     del st.session_state.historique
     del st.session_state.start_time
+    
+if "meilleur_temps" in st.session_state:
+    if round(st.session_state.meilleur_temps)//60<1:
+                meilleur_temps_tmp = str(round(st.session_state.meilleur_temps)%60)+ " sec !"
+    elif round(st.session_state.meilleur_temps)//60>0:
+                meilleur_temps_tmp = str(round(st.session_state.meilleur_temps)//60)+" min et "+ str(round(st.session_state.meilleur_temps)%60)+ " sec !"
+    if st.session_state.game != 1 :
+        st.caption(f"Votre meilleur temps sur cette session est {meilleur_temps_tmp}")
