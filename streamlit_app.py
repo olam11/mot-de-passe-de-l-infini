@@ -163,7 +163,7 @@ if mot_donne.text != "":
             st.error("Le mot n'est pas francais ou ne fait pas 5 lettres",icon="⚠️")
 #si ligne = 4 alors prévenir que cela seras la dernière proposition
 if st.session_state.ligne == 4:
-    st.write(f":red[Il vous reste 1 essai, vous y êtes presque !]")
+    st.info(f"Il vous reste 1 essai, vous y êtes presque !",icon="👍")
 #si ligne = 5 alors la partie est fini          
 if st.session_state.ligne == 5:
     st.session_state.game = st.session_state.game+1
