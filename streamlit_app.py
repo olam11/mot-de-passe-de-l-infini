@@ -16,23 +16,23 @@ import pandas as pd
 st.set_page_config(page_title="mot de passe de l'infini",
                    page_icon=":infinity:")
 
-st.balloons()
-
 @st.experimental_dialog("Nouvelle version ! 😉 ")
 def message_modif():
-    st.markdown("""Les nouveautés :\n
+    st.balloons()
+    st.markdown("""#### Les nouveautés :\n
 👈 Des statistiques sur votre session apparaissent dans le panneau latéral ainsi qu'une aide           
 Les mot s'affichent de bas en haut et plus de haut en bas pour une meilleure expérience sur mobile :       
 1.danse        
 2.algue 
         
-Mais :     
+Mais plutôt :     
 2.algue         
 1.danse 
 
 Merci beaucoup aux 24 utilisateurs pour leur participation et leurs retours très positifs ! 👍
              """)
     if st.button("j'ai compris !"):
+        st.balloons()
         st.rerun()
 
 #configurartion du titre 
