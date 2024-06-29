@@ -18,7 +18,6 @@ st.set_page_config(page_title="mot de passe de l'infini",
 
 @st.experimental_dialog("Nouvelle version ! 😉 ")
 def message_modif():
-    st.balloons()
     st.markdown("""#### Les nouveautés :\n
 👈 Des statistiques sur votre session apparaissent dans le panneau latéral ainsi qu'une aide           
 Les mot s'affichent de bas en haut et plus de haut en bas pour une meilleure expérience sur mobile :       
@@ -32,7 +31,6 @@ Mais plutôt :
 Merci beaucoup aux 24 utilisateurs pour leur participation et leurs retours très positifs ! 👍
              """)
     if st.button("j'ai compris !"):
-        st.balloons()
         st.rerun()
 
 #configurartion du titre 
@@ -40,7 +38,8 @@ st.title("MOT DE PASSE DE L'INFINI")
 
 #configuration de la variable run qui indique le nombre d'itération du programme 
 if "run" not in st.session_state:
-    st.session_state.run = 0 
+    st.session_state.run = 0
+    st.balloons() 
     message_modif()
 st.session_state.run = st.session_state.run+1
 
