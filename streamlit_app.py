@@ -9,25 +9,65 @@ import random
 #importation du hasard pour déterminer un mot au hasard
 import time
 #importation du temps
+import pandas as pd
+# importation du module de création de tableau pour le garphique
 
 #configuration du titre et du favicon 
 st.set_page_config(page_title="mot de passe de l'infini",
                    page_icon=":infinity:")
+
+st.balloons()
+
+@st.experimental_dialog("Nouvelle version ! 😉 ")
+def message_modif():
+    st.markdown("""Les nouveautés :\n
+👈 Des statistiques sur votre session apparaissent dans le panneau latéral ainsi qu'une aide           
+Les mot s'affichent de bas en haut et plus de haut en bas pour une meilleure expérience sur mobile :       
+1.danse        
+2.algue 
+        
+Mais :     
+2.algue         
+1.danse 
+
+Merci beaucoup aux 24 utilisateurs pour leur participation et leurs retours très positifs ! 👍
+             """)
+    if st.button("j'ai compris !"):
+        st.rerun()
+
 #configurartion du titre 
 st.title("MOT DE PASSE DE L'INFINI")
+
 #configuration de la variable run qui indique le nombre d'itération du programme 
 if "run" not in st.session_state:
     st.session_state.run = 0 
+    message_modif()
 st.session_state.run = st.session_state.run+1
 
+#configuration de la variable game qui indique le nombre de partie(s) jouée(s)
 if "game" not in st.session_state:
     st.session_state.game = 0 
+    
+#configuration de la variable game_perdue qui indique le nombre de partie(s) perdue(s)
+if "game_perdue" not in st.session_state:
+    st.session_state.game_perdue = 0 
+    
+#configuration de la variable game_gagnee qui indique le nombre de partie(s) gagnée(s)
+if "game_gagnee" not in st.session_state:
+    st.session_state.game_gagnee = 0 
+
+#configuration de la liste des temps d'une session
+if "historique_des_temps" not in st.session_state:
+    st.session_state.historique_des_temps = []  
+
 #configuration de la variable ligne qui indique le nombre d'essai dans une partie
 if "ligne"not in st.session_state:
     st.session_state.ligne = 0
+    
 #configuration de la liste des mots proposés dans une partie
 if "historique" not in st.session_state:
     st.session_state.historique = []  
+    
 #class Chaine : une chaine de caractère 
 class Chaine():
     def __init__(self,text,statut):
@@ -85,12 +125,16 @@ def check(mot_a_verifier, mot_a_trouver):
 #configuration du mot à trouver et création de ses 5 lettres
 if "mot_a_trouver" not in st.session_state:
     st.session_state.mot_a_trouver = Chaine("","à_trouvé")
+    # selection du mot au hasard
     st.session_state.mot_a_trouver.mot_random()
+    # création de ses 5 lettres 
     st.session_state.mot_a_trouver.creer_lettres()
 
+# configuation de mot
 mot = ""
-#nettoyage du chmps de texte s'il existe et qu'il contient quelque chose
+#nettoyage du champs de texte s'il existe et qu'il contient quelque chose
 if "textinput" in st.session_state and st.session_state["textinput"] != "":
+    # mot = le mot proposé dans le champs  de texte
     mot = st.session_state["textinput"]
     st.session_state["textinput"] = ""
 #configuration du champs de texte avec l'aide
@@ -105,16 +149,21 @@ st.text_input(label="###### Proposez un mot de 5 lettres :",max_chars=5,key="tex
             mot recherché : algue       
             mot proposé : danse         
             résultat : :grey[d]:red[a]:grey[ns]:green[e]        
-            **Une fois que vous avez gagné (ou perdu), il vous suffit de proposer un nouveau mot pour rejouer !**       
-            :grey[{st.session_state.mot_a_trouver.text}]               
+            **Une fois que vous avez gagné (ou perdu), il vous suffit de proposer un nouveau mot pour rejouer !**              
              """)
-#affichage de l'historique
-conteneur = st.container()
-for element in st.session_state.historique:
-    with conteneur:
-        st.markdown(element)
-#configuration 
+#affichage de l'historique en commencant par le dernier element
+# utilisation d'un conteneur pour pouvoir supprimmer l'affichage de l'historique
+
+# configuration de la longueur de l'historique
+def write_historique():
+    len_historique = len(st.session_state.historique)
+    for i in range(len_historique):
+        with st.container():
+            st.markdown(st.session_state.historique[-(i+1)])
+
+#configuration de l'objet mot_donne avec comme texte : mot
 mot_donne = Chaine(mot,"donné")
+# suppression de ses accent s'il y en a  
 mot_donne.supprimer_accents()
 
 #si le champs de text contient quelque chose
@@ -126,37 +175,43 @@ if mot_donne.text != "":
     if mot_donne.text in liste_des_mots_francais and len(mot_donne.text) == 5:
         #ajouter une ligne
         st.session_state.ligne = st.session_state.ligne+1
-        #créer les lettres du mot
+        #créer les lettres du mot donne
         mot_donne.creer_lettres()
         #fonction de vérification
         check(mot_donne.text,st.session_state.mot_a_trouver.text)
-        #ajouter à l'historique le mot avec ses couleurs
+        #ajouter du mot avec ses couleurs à l'historique 
         st.session_state.historique.append(str(st.session_state.ligne)+". "+f":{lettres['donné'][0].color}[{lettres['donné'][0].text}]"+
                                            f":{lettres['donné'][1].color}[{lettres['donné'][1].text}]"+
                                            f":{lettres['donné'][2].color}[{lettres['donné'][2].text}]"+
                                            f":{lettres['donné'][3].color}[{lettres['donné'][3].text}]"+
                                            f":{lettres['donné'][4].color}[{lettres['donné'][4].text}]")
-        #écrire le mot avec ses couleurs
-        st.markdown(st.session_state.historique[st.session_state.ligne-1])
-        #si lemot proposé et égal au mot à trouver
+        # imprimer l'historique
+
+        #si le mot proposé et égal au mot à trouver
         if mot_donne.text == st.session_state.mot_a_trouver.text:
-            #ligne = 5 pour finir la partie
-            st.session_state.ligne = 5
-            #écrire des félicitations
-            st.write("****Bravo, vous avez trouvé !!****")
             #arrêter le chrono
             end_time = time.time()
+            #ligne = 5 pour finir la partie
+            st.session_state.ligne = 5
+            # ajouter 1 à game gagnée
+            st.session_state.game_gagnee = st.session_state.game_gagnee+1
+            #écrire des félicitations
+            st.write("****Bravo, vous avez trouvé !!****")
+            # ajout du nouveau temps a l'historique des temps
+            st.session_state.historique_des_temps.append(end_time-st.session_state.start_time)
             #définir le temps en secondes et minutes 
             if round(end_time-st.session_state.start_time)//60<1:
                 temps = str(round(end_time-st.session_state.start_time)%60)+ " sec !"
             elif round(end_time-st.session_state.start_time)//60>0:
                 temps = str(round(end_time-st.session_state.start_time)//60)+" min et "+ str(round(end_time-st.session_state.start_time)%60)+ " sec !"
+            # configuration de meilleur temps avec le premier temps
             if "meilleur_temps" not in st.session_state:
                 st.session_state.meilleur_temps = end_time-st.session_state.start_time
+            # si le nouveau temps est meilleur que le meilleur temps alors remplacer le meilleur temps par le nouvaeu temps
             if end_time-st.session_state.start_time < st.session_state.meilleur_temps:
                 st.session_state.meilleur_temps = end_time-st.session_state.start_time
             #écrire le temps pris
-            st.write(f"***Vous avez trouvé en {temps}***")
+            st.write(f"Vous avez trouvé en {temps}")
     #ou si le mot n'est pas français ou ne contient pas 5 lettres
     elif mot_donne.text not in liste_des_mots_francais or len(mot_donne.text) != 5  :
             #écrire "Le mot n'est pas francais ou ne fait pas 5 lettres" 
@@ -164,24 +219,73 @@ if mot_donne.text != "":
 #si ligne = 4 alors prévenir que cela seras la dernière proposition
 if st.session_state.ligne == 4:
     st.info(f"Il vous reste 1 essai, vous y êtes presque !",icon="👍")
+if st.session_state.ligne != 5:
+    write_historique()          
 #si ligne = 5 alors la partie est fini          
 if st.session_state.ligne == 5:
+    # si mot pas trouvé alors ajouter 1 a game_perdue
+    if mot_donne.text != st.session_state.mot_a_trouver.text:
+         st.session_state.game_perdue = st.session_state.game_perdue+1
+    # ajouter 1 a game, une nouvelle partie a été jouée
     st.session_state.game = st.session_state.game+1
     #écrire "le mot était+lemot" et "Pour rejouer, proposez un nouveau mot !"
     st.write(f"Le mot était {st.session_state.mot_a_trouver.text} !") 
     st.write("Pour rejouer, proposez un nouveau mot !") 
     if st.button("rejouer") :
-        conteneur = ""
+        st.rerun()
+    write_historique()
     #supprimer les éléments de la partie pour rejouer au besoin  
     del st.session_state.ligne  
     del st.session_state.mot_a_trouver
     del st.session_state.historique
     del st.session_state.start_time
-    
-if "meilleur_temps" in st.session_state:
-    if round(st.session_state.meilleur_temps)//60<1:
-                meilleur_temps_tmp = str(round(st.session_state.meilleur_temps)%60)+ " sec !"
-    elif round(st.session_state.meilleur_temps)//60>0:
-                meilleur_temps_tmp = str(round(st.session_state.meilleur_temps)//60)+" min et "+ str(round(st.session_state.meilleur_temps)%60)+ " sec !"
-    if st.session_state.game != 1 :
-        st.caption(f"Votre meilleur temps sur cette session est {meilleur_temps_tmp}")
+
+
+# fonction pour afficher dans une baite de diaogue l'aide       
+@st.experimental_dialog("Aide")
+def aide():
+    st.write(f"""
+             Vous devez trouver un mot de 5 lettres.    
+            Vous pouvez faire 5 propositions de mot de 5 lettres de la langue française.      
+            Pour vous aider les lettres seront colorées :       
+                \t-en vert les lettres qui sont dans le mot recherché et à la bonne position      
+                \t-en rouge les lettres qui sont dans le mot recherché mais pas à la bonne position       
+                \t-en gris les lettres qui ne sont pas dans le mot recherché\n
+            Exemple :              
+            mot recherché : algue       
+            mot proposé : danse         
+            résultat : :grey[d]:red[a]:grey[ns]:green[e]        
+            **Une fois que vous avez gagné (ou perdu), il vous suffit de proposer un nouveau mot pour rejouer !**                  
+             """)   
+# nettoyage de la sidebar 
+st.sidebar.empty()
+# dans la sidebar
+with st.sidebar:
+    # afficher un titre : Sur cette session
+    st.title("Sur cette session : ")
+    # afficher le nombre de partie(s) jouée(s)
+    st.write("Partie(s) jouée(s): ",f":green[{str(st.session_state.game)}]")
+    # afficher le nombre de partie(s) gagnée(s)
+    st.write("Partie(s) gagnée(s) : ",f":green[{str(st.session_state.game_gagnee)}]")
+    # afficher le nombre de partie(s) perdue(s)
+    st.write("Partie(s) perdue(s) : ",f":red[{str(st.session_state.game_perdue)}]")
+    # s il y a un meilleur temps aalors
+    if "meilleur_temps" in st.session_state:
+        # le mettre en minutes et secondes 
+        if round(st.session_state.meilleur_temps)//60<1:
+                    meilleur_temps_tmp = str(round(st.session_state.meilleur_temps)%60)+ " sec !"
+        elif round(st.session_state.meilleur_temps)//60>0:
+                    meilleur_temps_tmp = str(round(st.session_state.meilleur_temps)//60)+" min et "+ str(round(st.session_state.meilleur_temps)%60)+ " sec !"
+        #si c'est le deuxième temps alors afficher le meilleur temps 
+        if st.session_state.game_gagnee != 1 :
+            st.write(f"Meilleur temps : :green[{meilleur_temps_tmp}]")
+    #si c'est le deuxième temps alors afficher lun graphique des temps
+    if st.session_state.game_gagnee > 1 :
+        chart_data = pd.DataFrame(st.session_state.historique_des_temps, columns=["Temps"])
+        st.write("Vos temps : ")
+        st.line_chart(chart_data)
+    # si aide est cliquée  alors afficher l'aide dans une boite de diologue
+    if st.button("Aide"):
+        aide() 
+        write_historique()
+ 
