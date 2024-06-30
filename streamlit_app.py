@@ -317,7 +317,6 @@ with st.sidebar:
     # si aide est cliquée  alors afficher l'aide dans une boite de diologue
     if st.button("Aide"):
         aide() 
-        write_historique()
 # si c'est le premier run alors afficher les nouveautés avec des ballons 
 if st.session_state.run == 1:
     st.balloons()
