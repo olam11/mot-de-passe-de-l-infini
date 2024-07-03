@@ -30,7 +30,7 @@ Mais plutôt :
 2.:green[a]:grey[l]:grey[gu]:green[e]         
 1.:grey[d]:red[a]:grey[ns]:green[e]
 
-Merci beaucoup aux 25 utilisateurs actuels pour leur participation et leurs retours très positifs ! 👍
+Merci beaucoup aux 40 utilisateurs actuels pour leur participation et leurs retours très positifs ! 👍
              """)
     if st.button("j'ai compris !"):
         st.rerun()
