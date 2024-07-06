@@ -36,8 +36,8 @@ Merci beaucoup aux 40 utilisateurs actuels pour leur participation et leurs reto
         st.rerun()
 
 # fonction pour afficher dans une baite de diaogue l'aide       
-@st.experimental_dialog("Aide")
-def aide():
+@st.experimental_dialog("Les règles")
+def regles():
     st.write(f"""
              Vous devez trouver un mot de 5 lettres.    
             Vous pouvez faire 5 propositions de mot de 5 lettres de la langue française.      
@@ -48,8 +48,7 @@ def aide():
             Exemple :              
             mot recherché : algue       
             mot proposé : danse         
-            résultat : :grey[d]:red[a]:grey[ns]:green[e]        
-            **Une fois que vous avez gagné (ou perdu), il vous suffit de proposer un nouveau mot pour rejouer !**                  
+            résultat : :grey[d]:red[a]:grey[ns]:green[e]                        
              """)   
 
 #class Chaine : une chaine de caractère 
@@ -315,10 +314,5 @@ with st.sidebar:
             
         
     # si aide est cliquée  alors afficher l'aide dans une boite de diologue
-    if st.button("Aide"):
-        aide() 
-# si c'est le premier run alors afficher les nouveautés avec des ballons 
-if st.session_state.run == 1:
-    st.balloons()
-    time.sleep(1.20) 
-    message_modif()
+    if st.button("Les règles"):
+        regles() 
